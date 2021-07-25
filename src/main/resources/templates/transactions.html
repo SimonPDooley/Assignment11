@@ -1,0 +1,35 @@
+<html xmlns:th="http://thymeleaf.org">
+	<head>
+		<title>Online Bank</title>
+		<link rel="stylesheet" href="/css/transactions.css"/>
+	</head>
+	<body>
+		<h2 th:if="${transactions != null}" >Transaction History</h2>
+		<table>
+			<tr  th:if="${transactions != null}">
+				<th>ID</th>
+				<th>Date</th>
+				<th>Retailer</th>
+				<th>Funds In</th>
+				<th>Funds Out</th>
+			</tr>
+			<tr th:each="storedTransaction : ${transactions}">
+				<td><a href="transactions.html" th:href="@{/transactions/{transactionId}(transactionId=${storedTransaction.id})}">[[${storedTransaction.id}]]</a></td>
+				<td th:text="${storedTransaction.date}"></td>
+				<td th:text="${storedTransaction.retailer}"></td>
+				<td th:if="${storedTransaction.type == 'C'}" th:text="${storedTransaction.amount}"></td>
+				<td ></td>
+				<td th:if="${storedTransaction.type == 'D'}" th:text="${storedTransaction.amount}"></td>	
+			</tr>
+		</table>
+		<div style=font-size:40px; th:if="${transactions == null}">
+			<h2 th:if="${transaction.type == 'D'}">Transaction ID: [[${transaction.id}]]  (Debit)</h2>
+			<h2 th:if="${transaction.type == 'C'}">Transaction ID: [[${transaction.id}]]  (Credit)</h2>
+			<span>Date: [[${transaction.date}]]</span><br>
+			<span th:if="${transaction.type == 'D'}">Amount:  [[${transaction.amount}]]</span>
+			<span th:if="${transaction.type == 'C'}">Amount: - [[${transaction.amount}]]</span><br>
+			<span>Description: [[${transaction.description}]]</span><br>
+			<a href ="/transactions">Back</a>
+		</div>
+	</body>
+</html>
